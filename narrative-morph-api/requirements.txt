@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+crewai
+python-dotenv
+beautifulsoup4
+requests
+# Add other NLP/AI SDKs as needed, e.g.:
+# openai
+# google-generativeai
+# elevenlabs
+# spacy
+# nltk
