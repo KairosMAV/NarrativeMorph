@@ -1,0 +1,31 @@
+"""
+Configuration constants for the Book to Game API
+"""
+
+# Educational Standards
+COMMON_CORE = "Common Core"
+CSTA_STANDARDS = "CSTA"
+NGSS_STANDARDS = "NGSS" 
+THEATER_ARTS = "Theater Arts Standards"
+
+# Target Platforms
+PLATFORM_MOBILE = "mobile"
+PLATFORM_DESKTOP = "desktop"
+PLATFORM_AR = "ar"
+PLATFORM_VR = "vr"
+
+# Age Groups
+AGE_GROUP_10_14 = "10-14"
+AGE_GROUP_13_18 = "13-18"
+AGE_GROUP_16_ADULT = "16-adult"
+
+# Default Configurations
+DEFAULT_EDUCATIONAL_STANDARDS = [COMMON_CORE]
+DEFAULT_TARGET_PLATFORMS = [PLATFORM_MOBILE, PLATFORM_DESKTOP, PLATFORM_AR]
+DEFAULT_AGE_GROUP = [AGE_GROUP_13_18]
+
+# API Configuration
+DEFAULT_MODEL = "gpt-4-turbo-preview"
+DEFAULT_TEMPERATURE = 0.7
+MAX_TOKENS = 4000
+REQUEST_TIMEOUT = 300

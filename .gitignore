@@ -1,3 +1,10 @@
+# 📦 NarrativeMorph - GitIgnore
+# Comprehensive ignore file for Python/FastAPI + React + Docker project
+
+# ==============================================================================
+# 🐍 PYTHON
+# ==============================================================================
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -27,8 +34,6 @@ share/python-wheels/
 MANIFEST
 
 # PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
 
@@ -51,29 +56,15 @@ coverage.xml
 .pytest_cache/
 cover/
 
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-.pybuilder/
-target/
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.python-version
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -83,58 +74,26 @@ profile_default/
 ipython_config.py
 
 # pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
-# .python-version
+.python-version
 
 # pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
-
-# UV
-#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#uv.lock
+Pipfile.lock
 
 # poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
+poetry.lock
 
-# pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#pdm.lock
-#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
-#   in version control.
-#   https://pdm.fming.dev/latest/usage/project/#working-with-version-control
-.pdm.toml
-.pdm-python
-.pdm-build/
+# UV
+uv.lock
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
+# PEP 582
+__pypackages__/ 
 
-# Celery stuff
+# Celery
 celerybeat-schedule
 celerybeat.pid
 
 # SageMath parsed files
 *.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
 
 # Spyder project settings
 .spyderproject
@@ -161,14 +120,313 @@ dmypy.json
 cython_debug/
 
 # PyCharm
-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#  and can be added to the global gitignore or merged into this file.  For a more nuclear
-#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
+.idea/
 
-# Ruff stuff:
+# Ruff stuff
 .ruff_cache/
 
 # PyPI configuration file
 .pypirc
+
+# ==============================================================================
+# ⚛️ REACT / NODE.JS
+# ==============================================================================
+
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production
+/build
+
+# Misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# NPM / Yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.yarn/
+.pnp.*
+
+# Package lock files (keep package-lock.json, remove yarn.lock)
+yarn.lock
+
+# ESLint cache
+.eslintcache
+
+# Next.js build output
+.next/
+out/
+
+# Vite
+dist/
+
+# TypeScript
+*.tsbuildinfo
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# Editor directories and files
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ==============================================================================
+# 🐳 DOCKER
+# ==============================================================================
+
+# Docker volumes data
+postgres_data/
+redis_data/
+
+# ==============================================================================
+# 🗄️ DATABASE
+# ==============================================================================
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+db.sqlite3-journal
+
+# Database dumps
+*.sql
+*.dump
+
+# PostgreSQL data
+pg_data/
+
+# ==============================================================================
+# 📝 LOGS & TEMPORARY FILES
+# ==============================================================================
+
+# Log files
+*.log
+logs/
+log/
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+*.temp
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# ==============================================================================
+# 🤖 AI MODELS & MEDIA
+# ==============================================================================
+
+# Large AI model files
+models/
+*.bin
+*.safetensors
+*.ckpt
+*.pth
+*.pt
+*.onnx
+*.tflite
+*.pb
+
+# CogVideoX models (these are very large - 5GB+)
+models/cogvideox/
+cogvideox/
+
+# Media files (uploads, generated content)
+uploads/
+media/videos/
+media/audio/
+media/images/
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
+*.mp3
+*.wav
+*.flac
+*.aac
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.svg
+*.ico
+
+# Unity projects (if any)
+media/unity-projects/
+
+# ==============================================================================
+# ⚙️ CONFIGURATION & SECRETS
+# ==============================================================================
+
+# Environment variables with secrets
+.env
+.env.*
+!.env.example
+
+# API keys and secrets
+secrets/
+.secrets
+*.key
+*.pem
+*.crt
+
+# Configuration files with sensitive data
+config.local.*
+local.config.*
+
+# ==============================================================================
+# 🔧 DEVELOPMENT TOOLS
+# ==============================================================================
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# ==============================================================================
+# 📊 DATA & ANALYTICS
+# ==============================================================================
+
+# Large data files
+data/
+*.csv
+*.xlsx
+*.xls
+
+# Keep important data structure
+!data/.gitkeep
+!data/README.md
+
+# Analytics and metrics
+.metrics/
+analytics/
+
+# ==============================================================================
+# 🧪 TESTING & DEVELOPMENT
+# ==============================================================================
+
+# Test outputs
+test-results/
+test-output/
+
+# Benchmarks
+benchmark_results/
+
+# Profiling
+*.prof
+
+# ==============================================================================
+# 🎯 PROJECT SPECIFIC
+# ==============================================================================
+
+# Redis dumps
+*.rdb
+
+# Backup files
+*.backup
+*.bak
+
+# Archive files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Large text files (stories, books) - keep requirements files
+*.txt
+!requirements*.txt
+!README*.txt
+
+# Keep important project files
+!.gitignore
+!README.md
+!LICENSE
+!CHANGELOG.md
+!CONTRIBUTING.md
+!ARCHITECTURE_EVOLUTION_PLAN.md
+
+# Specific dashboard-ui package files to ignore
+dashboard-ui/package-lock.json
+dashboard-ui/package.json
+
+# ==============================================================================
+# 📁 DIRECTORIES TO KEEP STRUCTURE
+# ==============================================================================
+
+# Keep empty directories with .gitkeep
+!*/.gitkeep
