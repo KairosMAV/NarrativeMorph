@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: narrative_postgres
+    environment:
+      POSTGRES_DB: narrative_morph
+      POSTGRES_USER: raguser
+      POSTGRES_PASSWORD: ragpass123
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/migrations:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U raguser -d narrative_morph"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for Caching & Background Jobs
+  redis:
+    image: redis:7-alpine
+    container_name: narrative_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Consolidated API Backend
+  api:
+    build: 
+      context: ./consolidated-api
+      dockerfile: Dockerfile
+    container_name: narrative_api
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://raguser:ragpass123@postgres:5432/narrative_morph
+      - REDIS_URL=redis://redis:6379
+      - ENVIRONMENT=development
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - STABILITY_API_KEY=${STABILITY_API_KEY}
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./consolidated-api:/app
+      - ./data:/app/data
+      - ./media:/app/media
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # React Dashboard UI
+  ui:
+    build:
+      context: ./dashboard-ui
+      dockerfile: Dockerfile
+    container_name: narrative_ui
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+      - REACT_APP_WS_URL=ws://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    volumes:
+      - ./dashboard-ui:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  default:
+    name: narrative_network

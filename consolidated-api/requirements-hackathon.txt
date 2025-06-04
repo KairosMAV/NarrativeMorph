@@ -1,0 +1,39 @@
+# 📦 NarrativeMorph - Hackathon Requirements (Simplified)
+# Core FastAPI dependencies
+fastapi==0.115.12
+uvicorn[standard]==0.32.1
+python-multipart==0.0.19
+
+# Database
+sqlalchemy==2.0.36
+asyncpg==0.30.0
+alembic==1.14.0
+psycopg2-binary==2.9.10
+
+# AI & ML (simplified for hackathon)
+crewai==0.83.0
+openai==1.84.0
+langchain==0.3.13
+langchain-openai==0.2.14
+langchain-community==0.3.13
+
+# Basic ML for video processing (without xformers)
+torch==2.5.1
+
+# Logging and utilities
+structlog==24.4.0
+python-dotenv==1.0.1
+transformers==4.47.1
+
+# File processing
+aiofiles==24.1.0
+pillow==11.0.0
+
+# Configuration
+pydantic==2.10.3
+pydantic-settings==2.7.0
+python-dotenv==1.0.1
+
+# Utilities
+requests==2.32.3
+httpx==0.28.1
