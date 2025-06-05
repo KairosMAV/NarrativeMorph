@@ -23,7 +23,7 @@ class UnityCodeAgent:
                            openai_api_key in ["mock-api-key", "test-api-key", "your-api-key-here"])
         
         if self.is_mock_mode:
-            from ..utils.mock_openai import MockOpenAIClient
+            from src.utils.mock_openai import MockOpenAIClient
             self.client = MockOpenAIClient()
             logger.info("Unity Code Agent initialized in MOCK mode")
         else:

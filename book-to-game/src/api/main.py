@@ -1,6 +1,11 @@
 """
 FastAPI application for Book to Game service
 """
+import sys
+import os
+# Add the project root to Python path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+
 from fastapi import FastAPI, HTTPException, File, UploadFile
 from fastapi.responses import JSONResponse, FileResponse
 from pydantic import BaseModel
@@ -17,9 +22,9 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-from ..services.book_to_game_service import BookToGameService
-from ..models.game_models import GameProject, SceneData
-from .constants import (
+from src.services.book_to_game_service import BookToGameService
+from src.models.game_models import GameProject, SceneData
+from src.api.constants import (
     DEFAULT_EDUCATIONAL_STANDARDS, DEFAULT_TARGET_PLATFORMS, 
     DEFAULT_AGE_GROUP, DEFAULT_MODEL, COMMON_CORE, CSTA_STANDARDS, 
     NGSS_STANDARDS
