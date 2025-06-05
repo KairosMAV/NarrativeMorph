@@ -1,0 +1,33 @@
+{
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "Il Piccolo Principe - L'Incontro",
+      "content": "Quando avevo sei anni vidi, una volta, una magnifica immagine in un libro sulla Foresta Vergine che si intitolava 'Storie vissute'. Rappresentava un serpente boa che inghiottiva una belva. Il bambino immaginava mondi fantastici e disegnava quello che vedeva.",
+      "characters": ["Il Narratore", "Il Piccolo Principe"],
+      "setting": "Deserto del Sahara",
+      "key_events": ["Incontro con il pilota", "Racconto del serpente boa", "Primo disegno"],
+      "educational_content": "Immaginazione e creatività, percezione e realtà",
+      "themes": ["Fantasia", "Crescita", "Incomprensione degli adulti"]
+    },
+    {
+      "scene_number": 2,
+      "title": "Il Piccolo Principe - Il Baobab",
+      "content": "Il piccolo principe mi spiegò il pericolo dei baobab nel suo piccolo pianeta. Bisognava estirpare regolarmente i germogli, altrimenti sarebbero cresciuti troppo e avrebbero spaccato il pianeta.",
+      "characters": ["Il Piccolo Principe", "Il Narratore"],
+      "setting": "Pianeta del Piccolo Principe",
+      "key_events": ["Spiegazione sui baobab", "Lezione di responsabilità", "Cura del pianeta"],
+      "educational_content": "Responsabilità ambientale, conseguenze delle azioni",
+      "themes": ["Responsabilità", "Ambiente", "Prevenzione"]
+    }
+  ],
+  "project_config": {
+    "target_platforms": ["mobile", "ar"],
+    "educational_standards": ["Common Core Literature"],
+    "target_age_groups": ["8-12"],
+    "project_name": "PiccoloPrincipeInterattivo",
+    "ar_features_enabled": true,
+    "minigames_enabled": true,
+    "multiplayer_enabled": false
+  }
+}

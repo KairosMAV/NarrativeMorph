@@ -1,0 +1,75 @@
+{
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "Le Tre Streghe - Atto I, Scena I",
+      "content": "Le tre streghe si riuniscono in un clima di tempesta e discutono quando si incontreranno di nuovo, fissando l'incontro con Macbeth su una landa. Le loro parole sono criptiche e ambigue, culminando nella frase 'Il bello è brutto, e il brutto è bello', mentre si dissolvono nella nebbia.",
+      "characters": ["Prima Strega", "Seconda Strega", "Terza Strega"],
+      "setting": "Un luogo desolato e aperto, probabilmente una landa, battuto da tuoni, fulmini e pioggia. L'ora è indeterminata, ma l'atmosfera suggerisce una notte buia e tempestosa.",
+      "key_events": ["Riunione delle streghe", "Pianificazione incontro con Macbeth", "Pronuncia della profezia", "Dissolvimento nella nebbia"],
+      "educational_content": "Analisi del soprannaturale in Shakespeare, uso di presagi e simbolismo",
+      "themes": ["Soprannaturale", "Destino", "Ambiguità morale", "Profezie"],
+      "mood_vibe": "Misterioso, sinistro, inquietante, premonitore",
+      "elementi_narrativi": "Tuoni e fulmini. Atmosfera tempestosa e tetra."
+    },
+    {
+      "scene_number": 2,
+      "title": "La Battaglia e le Notizie - Atto I, Scena II",
+      "content": "Il Re Duncan e il suo seguito incontrano un Capitano ferito che riporta le notizie della battaglia contro i ribelli e i Norregiani, lodando il coraggio di Macbeth. Successivamente arrivano Ross e Angus, confermando la vittoria e annunciando a Macbeth il titolo di Thane di Cawdor.",
+      "characters": ["Re Duncan", "Malcolm", "Donalbain", "Lennox", "Capitano", "Ross", "Angus"],
+      "setting": "Un campo di battaglia o un accampamento militare dopo uno scontro. L'ora è diurna, ma il cielo potrebbe essere ancora grigio e plumbeo. L'ambiente è teso e risuona ancora dell'eco della guerra.",
+      "key_events": ["Rapporto della battaglia", "Lode a Macbeth", "Assegnazione titolo Thane di Cawdor", "Condanna del traditore"],
+      "educational_content": "Struttura politica medievale scozzese, concetto di onore e tradimento",
+      "themes": ["Onore", "Tradimento", "Lealtà", "Guerra", "Giustizia"],
+      "mood_vibe": "Teso, eroico, informativo ma anche foriero di oscuri presagi",
+      "elementi_narrativi": "Allarme (rumore di guerra o trombe), spada insanguinata del Capitano, diamante offerto da Banquo a Macbeth"
+    },
+    {
+      "scene_number": 3,
+      "title": "Le Profezie delle Streghe - Atto I, Scena III",
+      "content": "Le tre streghe accolgono Macbeth con profezie (Thane di Glamis, Thane di Cawdor, Re futuro) e Banquo con enigmi (padre di re ma non re). Scompaiono improvvisamente. Poco dopo, Ross e Angus arrivano e confermano la prima profezia di Macbeth (Thane di Cawdor).",
+      "characters": ["Prima Strega", "Seconda Strega", "Terza Strega", "Macbeth", "Banquo", "Ross", "Angus"],
+      "setting": "Una landa desolata, ventosa, nebbiosa ('brughiera maledetta'). L'atmosfera è cupa e soprannaturale, con un senso di isolamento.",
+      "key_events": ["Incontro con le streghe", "Profezie per Macbeth", "Enigmi per Banquo", "Conferma della prima profezia", "Primi pensieri di omicidio"],
+      "educational_content": "Il potere delle profezie nel teatro elisabettiano, psicologia del protagonista tragico",
+      "themes": ["Destino vs Libero arbitrio", "Ambizione", "Soprannaturale", "Tentazione"],
+      "mood_vibe": "Inquietante, soprannaturale, premonitore, ambiguo, teso, di scoperta e rivelazione",
+      "elementi_narrativi": "Un pollice di pilota (come trofeo delle streghe), tamburo, bacchette, un setaccio (usato dalla strega per navigare)"
+    },
+    {
+      "scene_number": 4,
+      "title": "L'Investitura e l'Ostacolo - Atto I, Scena IV",
+      "content": "Re Duncan accoglie Macbeth con grande affetto e gratitudine, lodando il suo valore. Annuncia che Malcolm sarà il Principe di Cumberland, designando così il suo erede al trono. Macbeth rivela i suoi 'desideri neri e profondi' di superare questo ostacolo.",
+      "characters": ["Re Duncan", "Malcolm", "Donalbain", "Lennox", "Macbeth", "Banquo", "Ross", "Angus"],
+      "setting": "L'esterno di un castello, probabilmente Inverness, residenza di Macbeth. L'atmosfera è di celebrazione, gratitudine e accoglienza festosa. È giorno.",
+      "key_events": ["Investitura di Macbeth", "Designazione di Malcolm come erede", "Primi pensieri omicidi di Macbeth"],
+      "educational_content": "Successione monarchica, conflitto interiore del protagonista tragico",
+      "themes": ["Ambizione", "Succession", "Conflitto interiore", "Apparenza vs Realtà"],
+      "mood_vibe": "Solenne, celebrativo, caloroso ma sottilmente carico di tensione e presagio negativo",
+      "elementi_narrativi": "Fiori al Castello di Inverness (impliciti nella descrizione 'piacevole dimora')"
+    },
+    {
+      "scene_number": 5,
+      "title": "Lady Macbeth e la Lettera - Atto I, Scena V",
+      "content": "Lady Macbeth legge una lettera dal marito che racconta le profezie delle streghe. Subito si rivela la sua ambizione e la sua preoccupazione per la natura 'troppo buona' del marito. Quando Macbeth arriva, lei lo incita e lo manipola psicologicamente, spingendolo verso l'omicidio.",
+      "characters": ["Lady Macbeth", "Messaggero", "Macbeth"],
+      "setting": "Una stanza nel Castello di Inverness. L'ora è probabilmente sera o notte. L'atmosfera si evolve da una quieta lettura a un'esplosione di pensieri oscuri e determinati.",
+      "key_events": ["Lettura della lettera", "Arrivo del messaggero", "Invocazione agli spiriti", "Manipolazione di Macbeth"],
+      "educational_content": "Ruolo della donna nel teatro shakespeariano, tecniche di manipolazione psicologica",
+      "themes": ["Manipolazione", "Ambizione femminile", "Male", "Determinazione"],
+      "mood_vibe": "Determinato, malvagio, manipolatore, ambizioso, oscuro",
+      "elementi_narrativi": "Una lettera scritta da Macbeth, un corvo (simbolo di morte), un coltello (simbolo omicida)"
+    }
+  ],
+  "project_config": {
+    "target_platforms": ["mobile", "desktop", "ar"],
+    "educational_standards": ["Common Core Literature", "Theater Arts Standards"],
+    "target_age_groups": ["14-18"],
+    "project_name": "MacbethInteractive",
+    "ar_features_enabled": true,
+    "minigames_enabled": true,
+    "multiplayer_enabled": false,
+    "language": "italian",
+    "difficulty_level": "advanced"
+  }
+}

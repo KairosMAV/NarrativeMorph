@@ -1,0 +1,75 @@
+{
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "Le Tre Streghe - Atto I, Scena I",
+      "content": "Le tre streghe si riuniscono in un clima di tempesta e discutono quando si incontreranno di nuovo, fissando l'incontro con Macbeth su una landa. Le loro parole sono criptiche e ambigue, culminando nella frase 'Il bello è brutto, e il brutto è bello', mentre si dissolvono nella nebbia.",
+      "characters": ["Prima Strega", "Seconda Strega", "Terza Strega"],
+      "setting": "Un luogo desolato e aperto, probabilmente una landa, battuto da tuoni, fulmini e pioggia. L'ora è indeterminata, ma l'atmosfera suggerisce una notte buia e tempestosa.",
+      "key_events": ["Riunione delle streghe", "Pianificazione incontro con Macbeth", "Pronuncia della profezia", "Dissolvimento nella nebbia"],
+      "educational_content": "Analisi del soprannaturale in Shakespeare, uso di presagi e simbolismo",
+      "themes": ["Soprannaturale", "Destino", "Ambiguità morale", "Profezie"],
+      "mood_vibe": "Misterioso, sinistro, inquietante, premonitore",
+      "elementi_narrativi": "Tuoni e fulmini. Atmosfera tempestosa e tetra."
+    },
+    {
+      "scene_number": 3,
+      "title": "Le Profezie delle Streghe - Atto I, Scena III",
+      "content": "Le tre streghe accolgono Macbeth con profezie (Thane di Glamis, Thane di Cawdor, Re futuro) e Banquo con enigmi (padre di re ma non re). Scompaiono improvvisamente. Poco dopo, Ross e Angus arrivano e confermano la prima profezia di Macbeth (Thane di Cawdor).",
+      "characters": ["Prima Strega", "Seconda Strega", "Terza Strega", "Macbeth", "Banquo", "Ross", "Angus"],
+      "setting": "Una landa desolata, ventosa, nebbiosa ('brughiera maledetta'). L'atmosfera è cupa e soprannaturale, con un senso di isolamento.",
+      "key_events": ["Incontro con le streghe", "Profezie per Macbeth", "Enigmi per Banquo", "Conferma della prima profezia", "Primi pensieri di omicidio"],
+      "educational_content": "Il potere delle profezie nel teatro elisabettiano, psicologia del protagonista tragico",
+      "themes": ["Destino vs Libero arbitrio", "Ambizione", "Soprannaturale", "Tentazione"],
+      "mood_vibe": "Inquietante, soprannaturale, premonitore, ambiguo, teso, di scoperta e rivelazione",
+      "elementi_narrativi": "Un pollice di pilota (come trofeo delle streghe), tamburo, bacchette, un setaccio (usato dalla strega per navigare)"
+    },
+    {
+      "scene_number": 5,
+      "title": "Lady Macbeth e la Lettera - Atto I, Scena V",
+      "content": "Lady Macbeth legge una lettera dal marito che racconta le profezie delle streghe. Subito si rivela la sua ambizione e la sua preoccupazione per la natura 'troppo buona' del marito. Quando Macbeth arriva, lei lo incita e lo manipola psicologicamente, spingendolo verso l'omicidio.",
+      "characters": ["Lady Macbeth", "Messaggero", "Macbeth"],
+      "setting": "Una stanza nel Castello di Inverness. L'ora è probabilmente sera o notte. L'atmosfera si evolve da una quieta lettura a un'esplosione di pensieri oscuri e determinati.",
+      "key_events": ["Lettura della lettera", "Arrivo del messaggero", "Invocazione agli spiriti", "Manipolazione di Macbeth"],
+      "educational_content": "Ruolo della donna nel teatro shakespeariano, tecniche di manipolazione psicologica",
+      "themes": ["Manipolazione", "Ambizione femminile", "Male", "Determinazione"],
+      "mood_vibe": "Determinato, malvagio, manipolatore, ambizioso, oscuro",
+      "elementi_narrativi": "Una lettera scritta da Macbeth, un corvo (simbolo di morte), un coltello (simbolo omicida)"
+    },
+    {
+      "scene_number": 8,
+      "title": "Il Pugnale Visionario - Atto II, Scena I",
+      "content": "Banquo e Fleance camminano di notte nel cortile del castello. Banquo è tormentato dai sogni delle streghe. Incontrano Macbeth, che dopo averli lasciati soli, ha una famosa allucinazione di un pugnale insanguinato che lo guida verso l'omicidio di Duncan.",
+      "characters": ["Banquo", "Fleance", "Macbeth", "Servo"],
+      "setting": "Il cortile del Castello di Inverness, di notte. La luna è calata, le stelle sono spente, suggerendo un'oscurità profonda. L'atmosfera è silenziosa e sospesa.",
+      "key_events": ["Conversazione notturna", "Consegna del diamante", "Visione del pugnale", "Marcia verso l'omicidio"],
+      "educational_content": "Analisi delle allucinazioni nel teatro shakespeariano, simbolismo dell'arma",
+      "themes": ["Colpa", "Allucinazioni", "Destino inevitabile", "Trasformazione morale"],
+      "mood_vibe": "Misterioso, teso, premonitore, psicologico, allucinatorio",
+      "elementi_narrativi": "Una torcia, spada di Banquo, diamante (regalo di Duncan), una campana, un pugnale (allucinazione), gocce di sangue"
+    },
+    {
+      "scene_number": 12,
+      "title": "La Scoperta dell'Omicidio - Atto II, Scena III",
+      "content": "Macduff scopre il corpo di Duncan e lancia l'allarme. Il castello si risveglia nel caos. Macbeth finge shock e dolore, mentre Lady Macbeth simula uno svenimento. Malcolm e Donalbain, temendo per le loro vite, decidono di fuggire.",
+      "characters": ["Macduff", "Macbeth", "Lennox", "Lady Macbeth", "Banquo", "Malcolm", "Donalbain", "Ross"],
+      "setting": "La sala principale del castello, illuminata dall'alba. L'atmosfera è pesante di dolore, confusione e crescente sospetto.",
+      "key_events": ["Scoperta del corpo", "Suono della campana d'allarme", "Finto dolore di Macbeth", "Svenimento di Lady Macbeth", "Fuga dei figli di Duncan"],
+      "educational_content": "Tecniche di inganno e manipolazione, struttura della tragedia shakespeariana",
+      "themes": ["Inganno", "Colpa nascosta", "Caos politico", "Giustizia"],
+      "mood_vibe": "Orribile, caotico, di grande shock e incredulità. Un'atmosfera di tragedia improvvisa",
+      "elementi_narrativi": "La campana di allarme, sangue sui pugnali, il corpo di Duncan (descritto ma non visibile)"
+    }
+  ],
+  "project_config": {
+    "target_platforms": ["mobile", "desktop", "ar"],
+    "educational_standards": ["Common Core Literature", "Theater Arts Standards"],
+    "target_age_groups": ["14-18"],
+    "project_name": "MacbethInteractive",
+    "ar_features_enabled": true,
+    "minigames_enabled": true,
+    "multiplayer_enabled": false,
+    "language": "italian",
+    "difficulty_level": "advanced"
+  }
+}

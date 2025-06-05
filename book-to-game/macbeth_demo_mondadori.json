@@ -1,0 +1,70 @@
+{
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "Le Tre Streghe",
+      "content": "Tuoni e fulmini. Atmosfera tempestosa e tetra. Le tre streghe si riuniscono in un clima di tempesta e discutono quando si incontreranno di nuovo, fissando l'incontro con Macbeth su una landa. Le loro parole sono criptiche e ambigue, culminando nella frase 'Il bello è brutto, e il brutto è bello', mentre si dissolvono nella nebbia.",
+      "characters": ["Prima Strega", "Seconda Strega", "Terza Strega"],
+      "setting": "Un luogo desolato e aperto, probabilmente una landa, battuto da tuoni, fulmini e pioggia",
+      "key_events": ["Riunione delle streghe", "Pianificazione incontro con Macbeth", "Profezia criptica"],
+      "educational_content": "Letteratura inglese classica, elementi soprannaturali nel teatro",
+      "themes": ["Soprannaturale", "Destino", "Ambiguità morale"],
+      "mood": "Misterioso, sinistro, inquietante, premonitore"
+    },
+    {
+      "scene_number": 2,
+      "title": "Duncan e la Vittoria",
+      "content": "Il Re Duncan e il suo seguito incontrano un Capitano ferito che riporta le notizie della battaglia contro i ribelli e i Norregiani, lodando il coraggio di Macbeth. Successivamente arrivano Ross e Angus, confermando la vittoria e annunciando a Macbeth il titolo di Thane di Cawdor.",
+      "characters": ["Re Duncan", "Malcolm", "Donalbain", "Lennox", "Capitano", "Ross", "Angus"],
+      "setting": "Un campo di battaglia o un accampamento militare dopo uno scontro",
+      "key_events": ["Rapporto di battaglia", "Promozione di Macbeth", "Condanna del traditore"],
+      "educational_content": "Sistema feudale scozzese, valore militare, lealtà al sovrano",
+      "themes": ["Onore", "Lealtà", "Ricompensa del valore"],
+      "mood": "Teso, eroico, informativo ma anche foriero di oscuri presagi"
+    },
+    {
+      "scene_number": 3,
+      "title": "Le Profezie",
+      "content": "Le tre streghe si riuniscono su una landa desolata. Un tamburo annuncia l'arrivo di Macbeth e Banquo. Le streghe accolgono Macbeth con profezie (Thane di Glamis, Thane di Cawdor, Re futuro) e Banquo con enigmi (padre di re ma non re). Scompaiono improvvisamente. Ross e Angus confermano la prima profezia.",
+      "characters": ["Tre Streghe", "Macbeth", "Banquo", "Ross", "Angus"],
+      "setting": "Una landa desolata, ventosa, nebbiosa",
+      "key_events": ["Profezie per Macbeth", "Enigmi per Banquo", "Conferma del titolo", "Primi pensieri omicidi"],
+      "educational_content": "Predestinazione vs libero arbitrio, simbolismo nel teatro",
+      "themes": ["Destino", "Ambizione", "Tentazione", "Profezia che si auto-adempie"],
+      "mood": "Inquietante, soprannaturale, premonitore, ambiguo"
+    },
+    {
+      "scene_number": 4,
+      "title": "L'Arrivo al Castello",
+      "content": "Re Duncan si informa sull'esecuzione del Thane di Cawdor e accoglie Macbeth con grande affetto e gratitudine. Annuncia che Malcolm sarà il Principe di Cumberland, designando così il suo erede al trono. Macbeth rivela in un monologo i suoi 'desideri neri e profondi'.",
+      "characters": ["Re Duncan", "Malcolm", "Donalbain", "Macbeth", "Banquo"],
+      "setting": "L'esterno del Castello di Inverness",
+      "key_events": ["Accoglienza di Duncan", "Designazione di Malcolm come erede", "Primi pensieri traditori di Macbeth"],
+      "educational_content": "Successione monarchica, ospitalità medievale, conflitto interiore",
+      "themes": ["Gratitudine vs Tradimento", "Ambizione", "Conflitto interiore"],
+      "mood": "Solenne, celebrativo, caloroso ma sottilmente carico di tensione"
+    },
+    {
+      "scene_number": 5,
+      "title": "Lady Macbeth",
+      "content": "Lady Macbeth legge una lettera dal marito che racconta le profezie delle streghe. Un messaggero annuncia l'arrivo imminente del Re Duncan. Lady Macbeth invoca gli spiriti per 'disfarla del sesso' e riempirla di crudeltà. Quando Macbeth arriva, lei lo manipola psicologicamente, spingendolo verso l'omicidio.",
+      "characters": ["Lady Macbeth", "Messaggero", "Macbeth"],
+      "setting": "Una stanza nel Castello di Inverness",
+      "key_events": ["Lettura della lettera", "Invocazione agli spiriti", "Manipolazione di Macbeth", "Piano omicida"],
+      "educational_content": "Ruolo della donna nel teatro elisabettiano, psicologia della manipolazione",
+      "themes": ["Ambizione femminile", "Manipolazione", "Trasformazione del carattere"],
+      "mood": "Determinato, malvagio, manipolatore, ambizioso, oscuro"
+    }
+  ],
+  "project_config": {
+    "target_platforms": ["mobile", "desktop", "ar"],
+    "educational_standards": ["Common Core Literature", "Theater Arts Standards"],
+    "target_age_groups": ["14-18", "university"],
+    "project_name": "MacbethInteractiveMondadori",
+    "ar_features_enabled": true,
+    "minigames_enabled": true,
+    "multiplayer_enabled": false,
+    "content_rating": "educational",
+    "language": "italian"
+  }
+}

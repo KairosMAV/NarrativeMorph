@@ -1,0 +1,287 @@
+"""
+Main service for transforming book analysis into Unity game content.
+"""
+import asyncio
+from typing import List, Dict, Any, Optional
+from openai import OpenAI
+import json
+import os
+from dotenv import load_dotenv
+
+from ..models import (
+    BookAnalysis, Character, Location, Scene, GameConfiguration, 
+    ARConfiguration, UnityExport, GameType, ARExperienceType,
+    GameObjective, Puzzle, InteractiveObject
+)
+
+load_dotenv()
+
+
+class BookToGameService:
+    """Service for converting book analysis to game content."""
+    
+    def __init__(self):
+        self.client = OpenAI(
+            api_key=os.getenv("OPENAI_API_KEY"),
+            base_url="https://openrouter.ai/api/v1",
+        )
+        self.model = "google/gemini-2.5-flash-preview-05-20"
+    
+    async def transform_text_chunker_output(
+        self, 
+        text_chunker_scenes: List[Dict[str, str]], 
+        book_title: str = "Unknown",
+        book_author: str = "Unknown"
+    ) -> BookAnalysis:
+        """
+        Transform the output from text-chunker into a structured BookAnalysis.
+        
+        Args:
+            text_chunker_scenes: List of scenes from text-chunker API
+            book_title: Title of the book
+            book_author: Author of the book
+        """
+        # Extract characters from all scenes
+        characters = await self._extract_characters(text_chunker_scenes)
+        
+        # Extract locations from all scenes  
+        locations = await self._extract_locations(text_chunker_scenes)
+        
+        # Transform scenes into our format
+        scenes = await self._transform_scenes(text_chunker_scenes)
+        
+        # Analyze themes and plot
+        analysis_data = await self._analyze_themes_and_plot(text_chunker_scenes)
+        
+        return BookAnalysis(
+            title=book_title,
+            author=book_author,
+            genre=analysis_data.get("genre", "Fiction"),
+            summary=analysis_data.get("summary", ""),
+            themes=analysis_data.get("themes", []),
+            characters=characters,
+            locations=locations,
+            scenes=scenes,
+            plot_points=analysis_data.get("plot_points", []),
+            conflicts=analysis_data.get("conflicts", []),
+            resolutions=analysis_data.get("resolutions", [])
+        )
+    
+    async def _extract_characters(self, scenes: List[Dict[str, str]]) -> List[Character]:
+        """Extract and analyze characters from scenes."""
+        all_characters_text = "\n\n".join([
+            f"Scene {i+1}:\nPersonaggi: {scene['personaggi']}\nAzione: {scene['azione_in_corso']}"
+            for i, scene in enumerate(scenes)
+        ])
+        
+        prompt = f"""
+Analizza i seguenti personaggi estratti da scene di un libro e crea una lista strutturata.
+Per ogni personaggio unico, fornisci:
+
+{all_characters_text}
+
+Restituisci un JSON array con oggetti character che hanno questa struttura:
+{{
+    "name": "nome del personaggio",
+    "description": "descrizione fisica e caratteriale",
+    "personality_traits": ["trait1", "trait2", "trait3"],
+    "appearance": "aspetto fisico dettagliato",
+    "role": "protagonist/antagonist/supporting",
+    "dialogue_style": "stile di dialogo e modo di parlare",
+    "model_3d_hints": {{
+        "height": "tall/medium/short",
+        "build": "slim/average/muscular/heavy", 
+        "age_range": "child/teen/young_adult/adult/elderly",
+        "distinctive_features": ["feature1", "feature2"]
+    }},
+    "animation_suggestions": ["walk_confident", "gesture_hands", "expression_serious"],
+    "voice_characteristics": "voce profonda/acuta/rauca/melodiosa etc"
+}}
+
+Fornisci SOLO il JSON array, senza testo aggiuntivo.
+"""
+        
+        response = await self._call_llm(prompt)
+        try:
+            characters_data = json.loads(response)
+            return [Character(**char) for char in characters_data]
+        except (json.JSONDecodeError, Exception) as e:
+            print(f"Error parsing characters: {e}")
+            return []
+    
+    async def _extract_locations(self, scenes: List[Dict[str, str]]) -> List[Location]:
+        """Extract and analyze locations from scenes."""
+        all_locations_text = "\n\n".join([
+            f"Scene {i+1}:\nAmbientazione: {scene['ambientazione']}\nMood: {scene['mood_vibe']}"
+            for i, scene in enumerate(scenes)
+        ])
+        
+        prompt = f"""
+Analizza le seguenti ambientazioni estratte da scene di un libro e crea una lista di location uniche.
+
+{all_locations_text}
+
+Restituisci un JSON array con oggetti location che hanno questa struttura:
+{{
+    "name": "nome della location",
+    "description": "descrizione dettagliata dell'ambiente",
+    "atmosphere": "atmosfera generale del luogo",
+    "time_period": "periodo storico se specificato",
+    "weather": "condizioni meteorologiche se specificate",
+    "lighting": "tipo di illuminazione",
+    "sounds": ["sound1", "sound2", "sound3"],
+    "ar_markers": ["potential_marker1", "potential_marker2"],
+    "model_3d_hints": {{
+        "environment_type": "indoor/outdoor/mixed",
+        "scale": "small/medium/large",
+        "architectural_style": "modern/classical/fantasy/etc",
+        "key_objects": ["object1", "object2", "object3"]
+    }},
+    "interactive_objects": ["door", "book", "window", "chair"]
+}}
+
+Fornisci SOLO il JSON array, senza testo aggiuntivo.
+"""
+        
+        response = await self._call_llm(prompt)
+        try:
+            locations_data = json.loads(response)
+            return [Location(**loc) for loc in locations_data]
+        except (json.JSONDecodeError, Exception) as e:
+            print(f"Error parsing locations: {e}")
+            return []
+    
+    async def _transform_scenes(self, scenes: List[Dict[str, str]]) -> List[Scene]:
+        """Transform text-chunker scenes into our Scene format."""
+        transformed_scenes = []
+        
+        for i, scene in enumerate(scenes):
+            # Create basic scene structure
+            scene_obj = Scene(
+                id=f"scene_{i+1}",
+                title=f"Scene {i+1}",
+                summary=scene.get('azione_in_corso', ''),
+                location=scene.get('ambientazione', ''),
+                characters_present=self._extract_character_names(scene.get('personaggi', '')),
+                mood=scene.get('mood_vibe', ''),
+                key_events=[scene.get('azione_in_corso', '')],
+                objectives=await self._generate_scene_objectives(scene),
+                challenges=await self._generate_scene_challenges(scene),
+                rewards=["experience_points", "story_progression"]
+            )
+            transformed_scenes.append(scene_obj)
+        
+        return transformed_scenes
+    
+    def _extract_character_names(self, characters_text: str) -> List[str]:
+        """Extract character names from text description."""
+        # Simple name extraction - in a real implementation you'd want better NLP
+        words = characters_text.split()
+        # Look for capitalized words that might be names
+        potential_names = [word.strip('.,!?;:') for word in words if word[0].isupper() and len(word) > 2]
+        return list(set(potential_names))[:5]  # Limit to 5 names max
+    
+    async def _generate_scene_objectives(self, scene: Dict[str, str]) -> List[str]:
+        """Generate game objectives for a scene."""
+        prompt = f"""
+Basandoti su questa scena di un libro, genera 2-3 obiettivi di gioco appropriati:
+
+Ambientazione: {scene.get('ambientazione', '')}
+Personaggi: {scene.get('personaggi', '')} 
+Azione: {scene.get('azione_in_corso', '')}
+Mood: {scene.get('mood_vibe', '')}
+
+Gli obiettivi dovrebbero essere:
+- Interattivi e coinvolgenti
+- Collegati alla storia
+- Adatti per un gioco Unity
+- Specifici e realizzabili
+
+Restituisci SOLO una lista JSON di stringhe:
+["obiettivo1", "obiettivo2", "obiettivo3"]
+"""
+        
+        response = await self._call_llm(prompt)
+        try:
+            return json.loads(response)
+        except:
+            return ["Explore the area", "Interact with characters", "Advance the story"]
+    
+    async def _generate_scene_challenges(self, scene: Dict[str, str]) -> List[str]:
+        """Generate challenges for a scene."""
+        prompt = f"""
+Basandoti su questa scena, genera 1-2 sfide di gioco:
+
+Ambientazione: {scene.get('ambientazione', '')}
+Azione: {scene.get('azione_in_corso', '')}
+Mood: {scene.get('mood_vibe', '')}
+
+Le sfide dovrebbero essere:
+- Appropriate al mood e all'azione
+- Realizzabili in Unity
+- Coinvolgenti per il giocatore
+
+Restituisci SOLO una lista JSON:
+["sfida1", "sfida2"]
+"""
+        
+        response = await self._call_llm(prompt)
+        try:
+            return json.loads(response)
+        except:
+            return ["Navigate the environment", "Solve a puzzle"]
+    
+    async def _analyze_themes_and_plot(self, scenes: List[Dict[str, str]]) -> Dict[str, Any]:
+        """Analyze overall themes and plot structure."""
+        all_scenes_text = "\n\n".join([
+            f"Scene {i+1}:\n"
+            f"Elementi narrativi: {scene['elementi_narrativi']}\n"
+            f"Personaggi: {scene['personaggi']}\n"
+            f"Ambientazione: {scene['ambientazione']}\n"
+            f"Mood: {scene['mood_vibe']}\n"
+            f"Azione: {scene['azione_in_corso']}\n"
+            for i, scene in enumerate(scenes)
+        ])
+        
+        prompt = f"""
+Analizza queste scene di un libro e identifica:
+
+{all_scenes_text}
+
+Restituisci un JSON con questa struttura:
+{{
+    "genre": "genere letterario principale",
+    "summary": "riassunto generale della storia",
+    "themes": ["tema1", "tema2", "tema3"],
+    "plot_points": ["punto1", "punto2", "punto3"],
+    "conflicts": ["conflitto1", "conflitto2"],
+    "resolutions": ["risoluzione1", "risoluzione2"]
+}}
+
+Fornisci SOLO il JSON, senza testo aggiuntivo.
+"""
+        
+        response = await self._call_llm(prompt)
+        try:
+            return json.loads(response)
+        except:
+            return {
+                "genre": "Fiction",
+                "summary": "A story extracted from book scenes",
+                "themes": ["adventure", "friendship", "growth"],
+                "plot_points": ["beginning", "conflict", "resolution"],
+                "conflicts": ["internal struggle", "external challenge"],
+                "resolutions": ["character growth", "problem solved"]
+            }
+    
+    async def _call_llm(self, prompt: str) -> str:
+        """Make a call to the LLM."""
+        response = await asyncio.to_thread(
+            self.client.chat.completions.create,
+            model=self.model,
+            messages=[
+                {"role": "system", "content": "You are an expert in literary analysis and game design."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        return response.choices[0].message.content or ""
