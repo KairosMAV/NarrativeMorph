@@ -1,6 +1,6 @@
 # 🚀 NarrativeMorph - Consolidated API Requirements
 # Core FastAPI Framework
-fastapi==0.115.12
+fastapi==0.115.9
 uvicorn[standard]==0.32.1
 python-multipart==0.0.19
 
@@ -27,12 +27,12 @@ accelerate==1.2.1
 xformers==0.0.28.post3  # For memory optimization
 
 # 🎨 Image Generation
-stability-sdk==0.8.1
+stability-sdk==0.8.6
 Pillow==11.0.0
 opencv-python==4.10.0.84
 
 # 🎵 Audio Processing
-elevenlabs==1.15.0
+elevenlabs==1.59.0
 pydub==0.25.1
 librosa==0.10.2
 
@@ -64,7 +64,7 @@ flake8==7.1.1
 mypy==1.13.0
 
 # 📈 Monitoring & Logging
-structlog==24.5.0
+structlog==24.1.0
 rich==13.9.4
 sentry-sdk[fastapi]==2.20.0
 
@@ -83,7 +83,12 @@ shortuuid==1.0.13
 
 # 📊 Data Processing
 pandas==2.2.3
-numpy==2.1.3
+numpy>=1.24.0,<2.0.0
+
+# 🔧 Compatibility Constraints  
+grpcio>=1.58.0,<1.64.0  # Compatible with both ChromaDB and stability-sdk
+protobuf>=4.21.12,<6.0.0  # Compatible with stability-sdk and other packages
+tokenizers>=0.13.2,<0.22.0  # Compatible with ChromaDB and transformers
 
 # 🌍 Environment & Config
 pyyaml==6.0.2
