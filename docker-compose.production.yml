@@ -1,0 +1,142 @@
+# Docker Compose Production - Full Microservices (Post-Hackathon)
+version: '3.8'
+
+services:
+  # Database Services
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: rag_to_game
+      POSTGRES_USER: raguser
+      POSTGRES_PASSWORD: ragpass123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - rag_network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - rag_network
+
+  # Core Services
+  gateway-service:
+    build: ./services/gateway-service
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://raguser:ragpass123@postgres:5432/rag_to_game
+      - REDIS_URL=redis://redis:6379
+      - ORCHESTRATOR_URL=http://orchestrator-service:8001
+      - UNITY_GENERATOR_URL=http://unity-generator:8002
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./uploads:/app/uploads
+    networks:
+      - rag_network
+
+  orchestrator-service:
+    build: ./services/orchestrator-service
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql://raguser:ragpass123@postgres:5432/rag_to_game
+      - REDIS_URL=redis://redis:6379
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - STABILITY_API_KEY=${STABILITY_API_KEY}
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
+      - GOOGLE_VEO_API_KEY=${GOOGLE_VEO_API_KEY}
+      - TEXT_CHUNKER_URL=http://text-chunker:8003
+    depends_on:
+      - postgres
+      - redis
+      - text-chunker
+    volumes:
+      - ./media:/app/media
+    networks:
+      - rag_network
+
+  text-chunker:
+    build: ./text-chunker
+    ports:
+      - "8003:8003"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    networks:
+      - rag_network
+
+  unity-generator:
+    build: ./services/unity-generator
+    ports:
+      - "8002:8002"
+    environment:
+      - DATABASE_URL=postgresql://raguser:ragpass123@postgres:5432/rag_to_game
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - postgres
+    volumes:
+      - ./unity_projects:/app/unity_projects
+    networks:
+      - rag_network
+
+  media-service:
+    build: ./services/media-service
+    ports:
+      - "8004:8004"
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_S3_BUCKET=${AWS_S3_BUCKET}
+    volumes:
+      - ./media:/app/media
+      - ./temp:/app/temp
+    networks:
+      - rag_network
+
+  # Task Queue
+  celery-worker:
+    build: ./services/orchestrator-service
+    command: celery -A app.celery_app worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://raguser:ragpass123@postgres:5432/rag_to_game
+      - REDIS_URL=redis://redis:6379
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - STABILITY_API_KEY=${STABILITY_API_KEY}
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./media:/app/media
+    networks:
+      - rag_network
+
+  # Frontend
+  dashboard-ui:
+    build: ./dashboard-ui
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+      - REACT_APP_WS_URL=ws://localhost:8000
+    depends_on:
+      - gateway-service
+    networks:
+      - rag_network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  rag_network:
+    driver: bridge

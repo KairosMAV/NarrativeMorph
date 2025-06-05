@@ -117,14 +117,23 @@ class BookToGameService:
                 'Import generated scripts into Unity project',
                 'Configure AR Foundation for AR features',
                 'Implement asset generation pipeline',
-                'Set up automated testing framework',
-                'Configure performance monitoring',
+                'Set up automated testing framework',                'Configure performance monitoring',
                 'Test accessibility features',
                 'Conduct educational content validation'
             ]
         }
         
         return summary
+    
+    async def transform_scenes_to_game(
+        self, 
+        scenes: List[Dict[str, Any]], 
+        project_config: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Alias per transform_book_to_game per compatibilità con i test
+        """
+        return await self.transform_book_to_game(scenes, project_config)
     
     def _estimate_development_time(self, complete_project: Dict[str, Any]) -> Dict[str, str]:
         """Stima i tempi di sviluppo per le diverse fasi"""

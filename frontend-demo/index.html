@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NarrativeMorph - Demo Hackathon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 90%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .title {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .upload-section {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section:hover {
+            border-color: #764ba2;
+            background-color: #f8f9ff;
+        }
+
+        .upload-section.dragover {
+            border-color: #28a745;
+            background-color: #f0fff4;
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .upload-text {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .progress-section {
+            display: none;
+            margin: 30px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .status-section {
+            display: none;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .result-section {
+            display: none;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .error {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .success {
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .demo-info {
+            background-color: #e3f2fd;
+            border: 1px solid #90caf9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .demo-info h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .demo-info p {
+            color: #333;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🎬 NarrativeMorph</h1>
+            <p class="subtitle">Transform Stories into Videos in 5 Minutes</p>
+        </div>
+
+        <div class="demo-info">
+            <h3>🎯 Demo Hackathon</h3>
+            <p>Upload your story (1-2 pages) and watch it transform into a video with AI-generated scenes, images, and narration!</p>
+        </div>
+
+        <div class="upload-section" id="uploadSection">
+            <div class="upload-icon">📖</div>
+            <div class="upload-text">Drop your story file here or click to browse</div>
+            <input type="file" id="fileInput" class="file-input" accept=".txt,.md">
+            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                Choose File
+            </button>
+        </div>
+
+        <div class="progress-section" id="progressSection">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Starting processing...</div>
+        </div>
+
+        <div class="status-section" id="statusSection">
+            <h3>📊 Processing Status</h3>
+            <div class="status-item">
+                <span>Project ID:</span>
+                <span id="projectId">-</span>
+            </div>
+            <div class="status-item">
+                <span>Status:</span>
+                <span id="currentStatus">-</span>
+            </div>
+            <div class="status-item">
+                <span>Scenes Found:</span>
+                <span id="scenesCount">-</span>
+            </div>
+            <div class="status-item">
+                <span>Video Ready:</span>
+                <span id="videoReady">-</span>
+            </div>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <h3>🎉 Your Video is Ready!</h3>
+            <p>Click below to download your generated video:</p>
+            <br>
+            <a href="#" class="download-btn" id="downloadBtn">📥 Download Video</a>
+        </div>
+
+        <div id="messageArea"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/api/v1';
+        let currentProjectId = null;
+        let statusInterval = null;
+
+        // File upload handling
+        const fileInput = document.getElementById('fileInput');
+        const uploadSection = document.getElementById('uploadSection');
+        const progressSection = document.getElementById('progressSection');
+        const statusSection = document.getElementById('statusSection');
+        const resultSection = document.getElementById('resultSection');
+        const messageArea = document.getElementById('messageArea');
+
+        // Drag and drop
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.classList.add('dragover');
+        });
+
+        uploadSection.addEventListener('dragleave', () => {
+            uploadSection.classList.remove('dragover');
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadSection.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        async function handleFile(file) {
+            if (!file.name.endsWith('.txt') && !file.name.endsWith('.md')) {
+                showMessage('Please select a .txt or .md file', 'error');
+                return;
+            }
+
+            showMessage('Uploading story...', 'info');
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('title', file.name.replace(/\.[^/.]+$/, ""));
+
+                const response = await fetch(`${API_BASE}/stories/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Upload failed: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                currentProjectId = result.project_id;
+
+                showMessage('Story uploaded successfully! Processing started...', 'success');
+                
+                // Show progress and status sections
+                uploadSection.style.display = 'none';
+                progressSection.style.display = 'block';
+                statusSection.style.display = 'block';
+
+                // Update project ID in status
+                document.getElementById('projectId').textContent = currentProjectId;
+
+                // Start monitoring progress
+                startStatusMonitoring();
+
+            } catch (error) {
+                showMessage(`Upload failed: ${error.message}`, 'error');
+            }
+        }
+
+        function startStatusMonitoring() {
+            statusInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(`${API_BASE}/projects/${currentProjectId}/status`);
+                    if (!response.ok) {
+                        throw new Error('Status check failed');
+                    }
+
+                    const status = await response.json();
+                    updateStatus(status);
+
+                    if (status.status === 'completed' || status.status === 'failed') {
+                        clearInterval(statusInterval);
+                        
+                        if (status.status === 'completed' && status.video_ready) {
+                            showVideoReady();
+                        } else if (status.status === 'failed') {
+                            showMessage('Processing failed. Please try again.', 'error');
+                        }
+                    }
+
+                } catch (error) {
+                    console.error('Status check error:', error);
+                }
+            }, 5000); // Check every 5 seconds
+        }
+
+        function updateStatus(status) {
+            // Update progress bar
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            progressFill.style.width = `${status.progress || 0}%`;
+            progressText.textContent = `${status.status} - ${status.progress || 0}%`;
+
+            // Update status details
+            document.getElementById('currentStatus').textContent = status.status;
+            document.getElementById('scenesCount').textContent = status.scenes_count || 0;
+            document.getElementById('videoReady').textContent = status.video_ready ? 'Yes' : 'No';
+        }
+
+        function showVideoReady() {
+            progressSection.style.display = 'none';
+            resultSection.style.display = 'block';
+
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.href = `${API_BASE}/projects/${currentProjectId}/download`;
+            downloadBtn.onclick = () => {
+                showMessage('Download started!', 'success');
+            };
+        }
+
+        function showMessage(message, type) {
+            messageArea.innerHTML = `<div class="${type}">${message}</div>`;
+            setTimeout(() => {
+                messageArea.innerHTML = '';
+            }, 5000);
+        }
+
+        // Reset button functionality
+        function resetDemo() {
+            currentProjectId = null;
+            if (statusInterval) {
+                clearInterval(statusInterval);
+            }
+            
+            uploadSection.style.display = 'block';
+            progressSection.style.display = 'none';
+            statusSection.style.display = 'none';
+            resultSection.style.display = 'none';
+            
+            document.getElementById('fileInput').value = '';
+            messageArea.innerHTML = '';
+        }
+
+        // Add reset button to result section
+        document.addEventListener('DOMContentLoaded', () => {
+            const resultSection = document.getElementById('resultSection');
+            const resetBtn = document.createElement('button');
+            resetBtn.textContent = '🔄 Start New Demo';
+            resetBtn.className = 'upload-btn';
+            resetBtn.style.marginLeft = '20px';
+            resetBtn.onclick = resetDemo;
+            resultSection.appendChild(document.createElement('br'));
+            resultSection.appendChild(document.createElement('br'));
+            resultSection.appendChild(resetBtn);
+        });
+    </script>
+</body>
+</html>
