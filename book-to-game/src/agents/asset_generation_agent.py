@@ -1,6 +1,7 @@
 """
 Asset Generation Agent
 Genera asset 3D, texture, audio e altri contenuti per Unity
+Integrato con Replicate API per generazione di immagini e video
 """
 from typing import List, Dict, Any, Optional
 from openai import OpenAI
@@ -39,7 +40,8 @@ class AssetGenerationAgent:
                     "X-Title": "BookToGame"
                 }
             )
-            logger.info("Asset Generation Agent OpenAI client configured with custom headers for OpenRouter.")
+            logger.info("Asset Generation Agent OpenAI client configured with custom headers for OpenRouter.")        # Initialize Replicate service with lazy loading to avoid circular imports
+        self._replicate_service = None
             
         self.role = "Technical Artist & Asset Specialist"
         self.goal = "Generate comprehensive asset specifications for Unity projects"
@@ -51,6 +53,15 @@ class AssetGenerationAgent:
         - Performance optimization
         - Cross-platform compatibility
         - Asset pipeline automation"""
+    
+    @property
+    def replicate_service(self):
+        """Lazy loading of ReplicateService to avoid circular imports"""
+        if self._replicate_service is None:
+            from ..services.replicate_service import ReplicateService
+            self._replicate_service = ReplicateService()
+            logger.info(f"Replicate service initialized (Mock mode: {self._replicate_service.is_mock_mode})")
+        return self._replicate_service
     
     async def generate_3d_asset_specs(self, scene_data: Dict[str, Any]) -> Dict[str, Any]:
         """Genera specifiche per asset 3D basati sulla scena"""
@@ -297,4 +308,182 @@ class AssetGenerationAgent:
             
         except Exception as e:
             logger.error(f"Error creating asset pipeline: {e}")
+            raise
+        
+        # Replicate-powered asset generation methods
+    async def generate_visual_assets_with_replicate(self, scene_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Generate visual assets using Replicate API
+        Following the async pattern from text-chunker and other agents
+        """
+        logger.info("Generating visual assets using Replicate API")
+        
+        try:
+            # Generate complete asset package using Replicate service
+            replicate_assets = await self.replicate_service.generate_scene_assets(scene_data)
+            
+            # Also generate technical specifications using OpenAI
+            asset_specs = await self.generate_3d_asset_specs(scene_data)
+            
+            # Combine Replicate-generated assets with technical specifications
+            combined_assets = {
+                "generated_assets": replicate_assets,
+                "technical_specifications": asset_specs,
+                "integration_guidelines": {
+                    "environment_image": {
+                        "usage": "Background texture or skybox",
+                        "format": "JPG/PNG",
+                        "resolution": "1920x1080",
+                        "optimization": "Compress for mobile platforms"
+                    },
+                    "character_image": {
+                        "usage": "Character reference or texture",
+                        "format": "PNG with alpha",
+                        "resolution": "1024x1024", 
+                        "optimization": "Use for character card UI"
+                    },
+                    "video_asset": {
+                        "usage": "Cinematic cutscene or background animation",
+                        "format": "MP4",
+                        "optimization": "Mobile-friendly compression"
+                    }
+                },
+                "unity_import_instructions": {
+                    "environment": [
+                        "Import as Texture2D",
+                        "Set texture type to Default",
+                        "Enable 'Generate Mip Maps'",
+                        "Assign to environment material"
+                    ],
+                    "character": [
+                        "Import as Texture2D",
+                        "Set texture type to Default",
+                        "Apply to character material",
+                        "Use for UI portrait if needed"
+                    ],
+                    "video": [
+                        "Import as VideoClip",
+                        "Set compression to H.264",
+                        "Assign to VideoPlayer component",
+                        "Configure for platform optimization"
+                    ]
+                }
+            }
+            
+            logger.info(f"Successfully generated {replicate_assets.get('generation_summary', {}).get('total_assets', 0)} visual assets")
+            return combined_assets
+            
+        except Exception as e:
+            logger.error(f"Error generating visual assets with Replicate: {e}")
+            # Fallback to specifications only if Replicate fails
+            return {
+                "error": str(e),
+                "fallback_specifications": await self.generate_3d_asset_specs(scene_data),
+                "status": "partial_success"
+            }
+    
+    async def generate_character_assets(self, character_description: str, style: str = "realistic") -> Dict[str, Any]:
+        """Generate character-specific assets using Replicate"""
+        logger.info(f"Generating character assets for: {character_description}")
+        
+        try:
+            # Generate character image using Replicate
+            character_asset = await self.replicate_service.generate_character_image(character_description, style)
+            
+            # Generate technical specifications for the character
+            char_prompt = f"""
+            Create detailed technical specifications for this character: {character_description}
+            Style: {style}
+            
+            Generate specifications for:
+            - 3D model requirements (poly count, rigging)
+            - Texture maps needed (diffuse, normal, roughness)
+            - Animation set (idle, walk, talk, gesture)
+            - Unity controller setup
+            - Mobile optimization guidelines
+            
+            Return JSON with detailed specifications.
+            """
+            
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": f"You are a {self.role}. {self.backstory}"},
+                    {"role": "user", "content": char_prompt}
+                ],
+                temperature=0.7
+            )
+            
+            import json
+            tech_specs = json.loads(response.choices[0].message.content)
+            
+            return {
+                "generated_image": character_asset,
+                "technical_specifications": tech_specs,
+                "unity_integration": {
+                    "image_usage": "Character portrait, reference, or texture base",
+                    "recommended_workflow": [
+                        "Use generated image as character reference",
+                        "Create 3D model based on specifications",
+                        "Apply generated image as texture base",
+                        "Implement suggested animation set"
+                    ]
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"Error generating character assets: {e}")
+            raise
+    
+    async def generate_environment_assets(self, environment_description: str, mood: str = "neutral") -> Dict[str, Any]:
+        """Generate environment-specific assets using Replicate"""
+        logger.info(f"Generating environment assets for: {environment_description}")
+        
+        try:
+            # Generate environment image using Replicate
+            env_asset = await self.replicate_service.generate_scene_environment(environment_description, mood)
+            
+            # Generate technical specifications
+            env_prompt = f"""
+            Create environment asset specifications for: {environment_description}
+            Mood: {mood}
+            
+            Generate specifications for:
+            - Level layout and architecture
+            - Lighting setup and atmospheric effects
+            - Prop and decoration requirements
+            - Interactive elements placement
+            - Performance optimization for mobile/AR
+            
+            Return JSON with detailed environment specifications.
+            """
+            
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": f"You are a {self.role}. {self.backstory}"},
+                    {"role": "user", "content": env_prompt}
+                ],
+                temperature=0.7
+            )
+            
+            import json
+            env_specs = json.loads(response.choices[0].message.content)
+            
+            return {
+                "generated_image": env_asset,
+                "technical_specifications": env_specs,
+                "unity_integration": {
+                    "image_usage": "Skybox, background plane, or texture reference",
+                    "implementation_suggestions": [
+                        "Use as skybox material for outdoor scenes",
+                        "Apply to background quad for 2.5D setup",
+                        "Extract color palette for lighting setup",
+                        "Use as reference for 3D environment modeling"
+                    ]
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"Error generating environment assets: {e}")
             raise

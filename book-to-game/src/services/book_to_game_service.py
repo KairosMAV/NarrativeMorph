@@ -152,6 +152,177 @@ class BookToGameService:
         }
         
         return estimates
+    
+    async def transform_book_to_game_with_replicate(
+        self, 
+        text_chunker_output: List[Dict[str, Any]], 
+        project_config: Optional[Dict[str, Any]] = None,
+        generate_visual_assets: bool = True
+    ) -> Dict[str, Any]:
+        """
+        Trasforma l'output del text-chunker in un progetto Unity completo
+        con asset visivi generati tramite Replicate API
+        
+        Args:
+            text_chunker_output: Lista di scene dal text-chunker
+            project_config: Configurazione del progetto
+            generate_visual_assets: Se generare asset visivi con Replicate
+        
+        Returns:
+            Progetto Unity completo con tutti i file generati e asset visivi
+        """
+        # Configurazione di default se non fornita
+        if project_config is None:
+            project_config = {
+                'target_platforms': DEFAULT_TARGET_PLATFORMS,
+                'educational_standards': [COMMON_CORE, CSTA_STANDARDS],
+                'target_age_groups': DEFAULT_AGE_GROUP,
+                'project_name': 'BookToGameProject',
+                'ar_features_enabled': True,
+                'minigames_enabled': True,
+                'multiplayer_enabled': False
+            }
+        
+        logger.info(f"Transforming book with {len(text_chunker_output)} scenes (Replicate enabled: {generate_visual_assets})")
+        
+        try:
+            # 1. Processa le scene con il team di agenti (processo standard)
+            complete_project = await self.coordinator.process_book_scenes(
+                text_chunker_output, 
+                project_config
+            )
+            
+            # 2. Genera asset visivi con Replicate se richiesto
+            if generate_visual_assets:
+                logger.info("Generating visual assets using Replicate API...")
+                visual_assets = await self._generate_visual_assets_for_scenes(text_chunker_output)
+                complete_project['replicate_assets'] = visual_assets
+                
+                # Aggiorna le specifiche degli asset con quelli generati
+                if 'asset_specifications' in complete_project:
+                    complete_project['asset_specifications']['generated_visuals'] = visual_assets
+            
+            # 3. Genera la struttura del progetto Unity
+            unity_files = await self.coordinator.generate_unity_project_structure(complete_project)
+            
+            # 4. Aggiungi i file Unity alla struttura completa
+            complete_project['unity_project_files'] = unity_files
+            
+            # 5. Genera report di riepilogo (aggiornato con asset Replicate)
+            summary_report = self._generate_summary_report_with_replicate(complete_project, generate_visual_assets)
+            complete_project['project_summary'] = summary_report
+            
+            logger.info("Successfully transformed book to Unity project with Replicate integration")
+            return complete_project
+            
+        except Exception as e:
+            logger.error(f"Error transforming book to game with Replicate: {e}")
+            raise
+    
+    async def _generate_visual_assets_for_scenes(self, scenes: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Genera asset visivi per tutte le scene usando Replicate
+        Segue il pattern asincrono del text-chunker
+        """
+        logger.info(f"Generating visual assets for {len(scenes)} scenes")
+        
+        # Ottieni l'asset generation agent dal coordinator
+        asset_agent = self.coordinator.asset_agent
+        
+        visual_assets = {
+            "scenes": [],
+            "characters": {},
+            "environments": {},
+            "generation_summary": {
+                "total_scenes_processed": 0,
+                "successful_generations": 0,
+                "failed_generations": 0,
+                "total_assets_generated": 0
+            }
+        }
+        
+        try:
+            # Processa ogni scena in parallelo (pattern simile a text-chunker)
+            scene_tasks = []
+            for i, scene in enumerate(scenes):
+                scene_id = f"scene_{i+1}"
+                scene_copy = scene.copy()
+                scene_copy['id'] = scene_id
+                
+                # Crea task per generazione asset della scena
+                task = asset_agent.generate_visual_assets_with_replicate(scene_copy)
+                scene_tasks.append((scene_id, task))
+            
+            # Esegui tutte le generazioni in parallelo
+            results = []
+            for scene_id, task in scene_tasks:
+                try:
+                    result = await task
+                    results.append((scene_id, result, True))
+                    visual_assets["generation_summary"]["successful_generations"] += 1
+                except Exception as e:
+                    logger.error(f"Error generating assets for {scene_id}: {e}")
+                    results.append((scene_id, {"error": str(e)}, False))
+                    visual_assets["generation_summary"]["failed_generations"] += 1
+            
+            # Organizza i risultati
+            for scene_id, result, success in results:
+                scene_asset_data = {
+                    "scene_id": scene_id,
+                    "assets": result,
+                    "generation_successful": success
+                }
+                visual_assets["scenes"].append(scene_asset_data)
+                
+                if success and "generated_assets" in result:
+                    gen_assets = result["generated_assets"]
+                    if "generation_summary" in gen_assets:
+                        visual_assets["generation_summary"]["total_assets_generated"] += gen_assets["generation_summary"].get("total_assets", 0)
+            
+            visual_assets["generation_summary"]["total_scenes_processed"] = len(scenes)
+            
+            logger.info(f"Visual asset generation completed: {visual_assets['generation_summary']['successful_generations']}/{len(scenes)} scenes successful")
+            return visual_assets
+            
+        except Exception as e:
+            logger.error(f"Error in visual asset generation workflow: {e}")
+            visual_assets["error"] = str(e)
+            return visual_assets
+    
+    def _generate_summary_report_with_replicate(self, complete_project: Dict[str, Any], replicate_enabled: bool) -> Dict[str, Any]:
+        """Genera un report di riepilogo che include informazioni sui Replicate assets"""
+        
+        # Genera il report standard
+        summary = self._generate_summary_report(complete_project)
+        
+        # Aggiungi informazioni specifiche per Replicate se abilitato
+        if replicate_enabled and 'replicate_assets' in complete_project:
+            replicate_assets = complete_project['replicate_assets']
+            gen_summary = replicate_assets.get('generation_summary', {})
+            
+            summary['replicate_integration'] = {
+                'visual_assets_generated': True,
+                'scenes_processed': gen_summary.get('total_scenes_processed', 0),
+                'successful_generations': gen_summary.get('successful_generations', 0),
+                'failed_generations': gen_summary.get('failed_generations', 0),
+                'total_visual_assets': gen_summary.get('total_assets_generated', 0),
+                'success_rate': f"{(gen_summary.get('successful_generations', 0) / max(1, gen_summary.get('total_scenes_processed', 1))) * 100:.1f}%"
+            }
+            
+            # Aggiorna le raccomandazioni
+            summary['recommended_next_steps'].extend([
+                'Import generated visual assets into Unity project',
+                'Configure Replicate-generated images as textures',
+                'Set up VideoPlayer components for generated videos',
+                'Optimize visual assets for target platforms'
+            ])
+        else:
+            summary['replicate_integration'] = {
+                'visual_assets_generated': False,
+                'note': 'Visual asset generation was disabled or failed'
+            }
+        
+        return summary
 
 # Esempio di utilizzo
 async def example_usage():

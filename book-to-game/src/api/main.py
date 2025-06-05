@@ -306,6 +306,32 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.post("/transform/book-to-game-with-replicate")
+async def transform_book_to_game_with_replicate(request: TransformRequest):
+    """
+    Trasforma un libro in un progetto Unity con generazione di asset visivi tramite Replicate
+    """
+    try:
+        logger.info(f"Received Replicate request to transform {len(request.scenes)} scenes")
+        
+        # Converti la configurazione in dizionario se fornita
+        config_dict = None
+        if request.project_config:
+            config_dict = request.project_config.dict()
+        
+        # Trasforma il libro usando il servizio con Replicate
+        unity_project = await service.transform_book_to_game_with_replicate(
+            request.scenes, 
+            config_dict
+        )
+        
+        logger.info("Successfully transformed book to Unity project with Replicate assets")
+        return JSONResponse(content=unity_project)
+        
+    except Exception as e:
+        logger.error(f"Error transforming book with Replicate: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
